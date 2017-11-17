@@ -4,13 +4,17 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
 import { AboutPage } from '../pages/about/about';
-import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
+import { SettingsPage } from '../pages/settings/settings';
+import { ScannerPage } from '../pages/scanner/scanner';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AuthProvider } from '../providers/auth/auth';
+import { NFC,Ndef } from '@ionic-native/nfc';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
+
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
@@ -28,9 +32,10 @@ const firebaseConfig = {
   declarations: [
     MyApp,
     AboutPage,
-    ContactPage,
+    SettingsPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    ScannerPage
   ],
   imports: [
     BrowserModule,
@@ -42,15 +47,19 @@ const firebaseConfig = {
   entryComponents: [
     MyApp,
     AboutPage,
-    ContactPage,
+    SettingsPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    ScannerPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    AuthProvider
+    AuthProvider,
+    NFC,
+    Ndef,
+    AndroidPermissions
   ]
 })
 export class AppModule {}
