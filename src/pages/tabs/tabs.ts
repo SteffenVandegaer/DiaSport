@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-
+import { NavController } from 'ionic-angular';
 import { SettingsPage } from '../settings/settings';
 import { HomePage } from '../home/home';
 import { ScannerPage } from '../scanner/scanner';
-
 
 @Component({
   templateUrl: 'tabs.html'
@@ -15,6 +14,7 @@ export class TabsPage {
   tab3Root = SettingsPage;
 
   constructor() {
-
+      
   }
+  
 }

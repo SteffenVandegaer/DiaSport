@@ -32,21 +32,9 @@ export class ScannerPage{
     );
 
     platform.ready().then(() => {
-      /*nfc.addNdefListener(
-        function() {
-          console.log("Success.");
-        },
-        function() {
-          console.log("Fail.");
-        });*/
+      this.nfc.addNdefListener().subscribe(nfcData => {
+        console.log("Received NFC tag: " + JSON.stringify(nfcData));
+      });
   });
-  }
-
-  read(){
-    console.log("start");
-    this.nfc.addNdefListener().subscribe(nfcData => {
-      console.log("Received NFC tag: " + JSON.stringify(nfcData));
-    });
-    console.log("stop");
   }
 }

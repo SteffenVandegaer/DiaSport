@@ -8,12 +8,13 @@ import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { SettingsPage } from '../pages/settings/settings';
 import { ScannerPage } from '../pages/scanner/scanner';
-
+import {LoginPage} from '../pages/login/login';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AuthProvider } from '../providers/auth/auth';
 import { NFC,Ndef } from '@ionic-native/nfc';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
+
 
 
 import { AngularFireModule } from 'angularfire2';
@@ -35,11 +36,18 @@ const firebaseConfig = {
     SettingsPage,
     HomePage,
     TabsPage,
-    ScannerPage
+    ScannerPage,
+    LoginPage
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp,{
+      modalEnter: 'modal-slide-in',
+      modalLeave: 'modal-slide-out',
+      tabsPlacement: 'bottom',
+      pageTransition: 'ios-transition',
+      tabsHideOnSubPages: true
+    }),
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule
   ],
@@ -50,7 +58,8 @@ const firebaseConfig = {
     SettingsPage,
     HomePage,
     TabsPage,
-    ScannerPage
+    ScannerPage,
+    LoginPage
   ],
   providers: [
     StatusBar,
@@ -59,7 +68,8 @@ const firebaseConfig = {
     AuthProvider,
     NFC,
     Ndef,
-    AndroidPermissions
+    AndroidPermissions,
+    MyApp
   ]
 })
 export class AppModule {}
