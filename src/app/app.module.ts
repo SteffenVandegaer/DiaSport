@@ -14,8 +14,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { AuthProvider } from '../providers/auth/auth';
 import { NFC,Ndef } from '@ionic-native/nfc';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
-
-
+import { NfcvService } from '../../plugins/cordova-nfcv-plugin/ionic2';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
@@ -69,7 +68,8 @@ const firebaseConfig = {
     NFC,
     Ndef,
     AndroidPermissions,
-    MyApp
+    MyApp,
+    NfcvService
   ]
 })
 export class AppModule {}
