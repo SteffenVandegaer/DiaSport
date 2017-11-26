@@ -10,6 +10,9 @@ import {
   Marker
  } from '@ionic-native/google-maps';
  import { Geolocation } from '@ionic-native/geolocation';
+ import * as firebase from 'firebase/app';
+ import { AngularFireDatabase} from 'angularfire2/database';
+ import { AngularFireAuth } from 'angularfire2/auth';
 
  declare var google;
  var myLat=0;
@@ -24,10 +27,49 @@ export class HomePage {
   map: GoogleMap;
   
   
-  constructor(public navCtrl: NavController,private googleMaps: GoogleMaps,private geolocation: Geolocation,public alertCtrl: AlertController) {
-
+  constructor(public navCtrl: NavController,private googleMaps: GoogleMaps,private geolocation: Geolocation,public alertCtrl: AlertController, private afDatabase: AngularFireDatabase, private afAuth: AngularFireAuth) {
+    
+    
   }
 
+
+  myMethod()
+  {
+    this.geolocation.getCurrentPosition().then((resp) => {
+      myLat=resp.coords.latitude
+      myLng=resp.coords.longitude
+      this.afAuth.authState.subscribe( user => {
+        if (user) {
+          const users: firebase.database.Reference = firebase.database().ref(`/User/`+user.uid);
+          users.on('value', snapshot=> {
+            var updates = {};
+            updates['/User/' + user.uid] = {lat:myLat,lng:myLng,user_name:snapshot.val().user_name};
+            firebase.database().ref().update(updates);
+          });
+        }
+        
+      });
+      this.map.clear();
+      this.map.addMarker({
+        title: 'My Location',
+        icon: 'green',
+        animation: 'DROP',
+        position: {
+          lat: resp.coords.latitude,
+          lng: resp.coords.longitude
+        }
+      })
+      .then(marker => {
+        marker.on(GoogleMapsEvent.MARKER_CLICK)
+          .subscribe(() => {
+            this.showConfirm();
+          });
+      });
+
+     }).catch((error) => {
+       console.log('Error getting location', error);
+     });
+  }
 
   ionViewDidLoad() {
     this.loadMap();
@@ -80,7 +122,7 @@ export class HomePage {
        console.log('Error getting location', error);
      });
      
-     
+     setInterval(this.myMethod(), 5000);
    }
 
    showConfirm() {
