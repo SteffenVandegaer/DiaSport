@@ -28,6 +28,7 @@ import {
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
 
 const firebaseConfig = {
   apiKey: "AIzaSyA43tuYz9kTRECR4Du1mnycRbsAblaSGAg",
@@ -37,6 +38,7 @@ const firebaseConfig = {
   storageBucket: "diasports-67224.appspot.com",
   messagingSenderId: "529704432993"
 };
+
 
 @NgModule({
   declarations: [
@@ -59,7 +61,8 @@ const firebaseConfig = {
       tabsHideOnSubPages: true
     }),
     AngularFireModule.initializeApp(firebaseConfig),
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    AngularFireDatabaseModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -80,8 +83,7 @@ const firebaseConfig = {
     AndroidPermissions,
     MyApp,
     GoogleMaps,
-    Geolocation 
-    
+    Geolocation
   ]
 })
 export class AppModule {}

@@ -12,8 +12,17 @@
 
 </ion-header>
 
-<ion-content padding>
+<ion-content>
+  <ion-item>
+    <ion-label color="primary" stacked>Username</ion-label>
+    <ion-input id="userName" type="text" placeholder="fill out username to get started" [(ngModel)]="testtest"></ion-input>
+  </ion-item>
+  <button ion-button block round (click)="saveSettings()" color="secondary">Save</button>
+  <br/>
   <button ion-button round (click)="navigate()">Navigatie Test</button>
-
-  <button ion-button color="danger" round (click)="logout()">logout</button>
+  
+  <div class="button-bottom">
+      <button ion-button block color="danger" round (click)="logout()">logout</button>
+  </div>
+  
 </ion-content>
