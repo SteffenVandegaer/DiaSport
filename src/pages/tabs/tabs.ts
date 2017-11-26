@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { SettingsPage } from '../settings/settings';
 import { HomePage } from '../home/home';
-import { ScannerPage } from '../scanner/scanner';
+import { MessagesPage } from '../messages/messages';
 
 @Component({
   templateUrl: 'tabs.html'
@@ -10,7 +10,7 @@ import { ScannerPage } from '../scanner/scanner';
 export class TabsPage {
 
   tab1Root = HomePage;
-  tab2Root = ScannerPage;
+  tab2Root = MessagesPage;
   tab3Root = SettingsPage;
 
   constructor() {

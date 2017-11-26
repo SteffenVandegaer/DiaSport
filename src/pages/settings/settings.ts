@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 import { LoginPage } from '../login/login';
 import { MyApp } from '../../app/app.component';
+import { NavigatePage } from '../navigate/navigate';
 
 
 @Component({
@@ -18,6 +19,10 @@ export class SettingsPage {
   logout(){
     this.authData.logoutUser();
     this.navCtrl.push(LoginPage);
+  }
+
+  navigate(){
+    this.navCtrl.push(NavigatePage);
   }
 
   ionViewDidLoad() {

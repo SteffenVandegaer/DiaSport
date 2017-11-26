@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>DiaSport</name>
-    <description>An awesome Ionic/Cordova app.</description>
+    <name>Come Find Me</name>
+    <description>An app that shares your location with a chosen friend and leads them to you</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
     <content src="index.html" />
     <access origin="*" />
@@ -11,6 +11,7 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <allow-intent href="nfc:*" />
     <preference name="ScrollEnabled" value="false" />
     <preference name="android-minSdkVersion" value="16" />
     <preference name="BackupWebStorage" value="none" />
@@ -86,4 +87,11 @@
     <plugin name="cordova-plugin-ionic-webview" spec="^1.1.16" />
     <plugin name="phonegap-nfc" spec="^0.7.1" />
     <plugin name="cordova-plugin-android-permissions" spec="^1.0.0" />
+    <plugin name="cordova-plugin-googlemaps" spec="^2.1.1">
+        <variable name="API_KEY_FOR_ANDROID" value="AIzaSyDvo2jZvJ8f3V0o5XyTamAwqyiAb77Q3jY" />
+        <variable name="API_KEY_FOR_IOS" value="AIzaSyDAom08y0v1oVLdNuc8MnyKHZBlryBw9R8" />
+    </plugin>
+    <plugin name="cordova-plugin-geolocation" spec="^3.0.0">
+        <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To locate you" />
+    </plugin>
 </widget>

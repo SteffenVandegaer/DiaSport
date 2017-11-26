@@ -1,4 +1,4 @@
-import { NgModule, ErrorHandler } from '@angular/core';
+import { NgModule, ErrorHandler, Component, ViewChild, ElementRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
@@ -7,14 +7,24 @@ import { AboutPage } from '../pages/about/about';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { SettingsPage } from '../pages/settings/settings';
-import { ScannerPage } from '../pages/scanner/scanner';
-import {LoginPage} from '../pages/login/login';
+import { MessagesPage } from '../pages/messages/messages';
+import { LoginPage } from '../pages/login/login';
+import { NavigatePage } from '../pages/navigate/navigate';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AuthProvider } from '../providers/auth/auth';
-import { NFC,Ndef } from '@ionic-native/nfc';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
-import { NfcvService } from '../../plugins/cordova-nfcv-plugin/ionic2';
+import { Geolocation } from '@ionic-native/geolocation';
+
+import {
+  GoogleMaps,
+  GoogleMap,
+  GoogleMapsEvent,
+  GoogleMapOptions,
+  CameraPosition,
+  MarkerOptions,
+  Marker
+ } from '@ionic-native/google-maps';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
@@ -35,8 +45,9 @@ const firebaseConfig = {
     SettingsPage,
     HomePage,
     TabsPage,
-    ScannerPage,
-    LoginPage
+    LoginPage,
+    MessagesPage,
+    NavigatePage
   ],
   imports: [
     BrowserModule,
@@ -57,19 +68,20 @@ const firebaseConfig = {
     SettingsPage,
     HomePage,
     TabsPage,
-    ScannerPage,
-    LoginPage
+    LoginPage,
+    MessagesPage,
+    NavigatePage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthProvider,
-    NFC,
-    Ndef,
     AndroidPermissions,
     MyApp,
-    NfcvService
+    GoogleMaps,
+    Geolocation 
+    
   ]
 })
 export class AppModule {}
