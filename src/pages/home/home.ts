@@ -32,45 +32,6 @@ export class HomePage {
     
   }
 
-
-  myMethod()
-  {
-    this.geolocation.getCurrentPosition().then((resp) => {
-      myLat=resp.coords.latitude
-      myLng=resp.coords.longitude
-      this.afAuth.authState.subscribe( user => {
-        if (user) {
-          const users: firebase.database.Reference = firebase.database().ref(`/User/`+user.uid);
-          users.on('value', snapshot=> {
-            var updates = {};
-            updates['/User/' + user.uid] = {lat:myLat,lng:myLng,user_name:snapshot.val().user_name};
-            firebase.database().ref().update(updates);
-          });
-        }
-        
-      });
-      this.map.clear();
-      this.map.addMarker({
-        title: 'My Location',
-        icon: 'green',
-        animation: 'DROP',
-        position: {
-          lat: resp.coords.latitude,
-          lng: resp.coords.longitude
-        }
-      })
-      .then(marker => {
-        marker.on(GoogleMapsEvent.MARKER_CLICK)
-          .subscribe(() => {
-            this.showConfirm();
-          });
-      });
-
-     }).catch((error) => {
-       console.log('Error getting location', error);
-     });
-  }
-
   ionViewDidLoad() {
     this.loadMap();
    }
@@ -96,11 +57,7 @@ export class HomePage {
       // Wait the MAP_READY before using any methods.
       this.map.one(GoogleMapsEvent.MAP_READY)
         .then(() => {
-          
-          
           console.log('Map is ready!');
-  
-          // Now you can use all methods safely.
           this.map.addMarker({
               title: 'My Location',
               icon: 'green',
@@ -116,15 +73,63 @@ export class HomePage {
                   this.showConfirm();
                 });
             });
+            
   
         });
      }).catch((error) => {
        console.log('Error getting location', error);
      });
      
-     setInterval(this.myMethod(), 5000);
+    setTimeout(()=> {
+      this.startTimer(this.map);
+    }, 3000);
+    /*const subscription = this.geolocation.watchPosition()
+    .filter((p) => p.coords !== undefined) //Filter Out Errors
+    .subscribe(position => {
+       console.log(position.coords.longitude + ' ' + position.coords.latitude);
+     });*/
    }
+   startTimer=(myMap)=>{
+      this.geolocation.getCurrentPosition().then((resp) => {
+        myLat=resp.coords.latitude
+        myLng=resp.coords.longitude
+        this.afAuth.authState.subscribe( user => {
+          if (user) {
+            const users: firebase.database.Reference = firebase.database().ref(`/User/`+user.uid);
+            users.on('value', snapshot=> {
+              var updates = {};
+              updates['/User/' + user.uid] = {lat:myLat,lng:myLng,user_name:snapshot.val().user_name};
+              firebase.database().ref().update(updates);
+            });
+          }
+          
+        });
+        myMap.clear();
+        myMap.addMarker({
+          title: 'My Location',
+          icon: 'green',
+          animation: 'NONE',
+          position: {
+            lat: resp.coords.latitude,
+            lng: resp.coords.longitude
+          }
+        })
+        .then(marker => {
+          marker.on(GoogleMapsEvent.MARKER_CLICK)
+            .subscribe(() => {
+              this.showConfirm();
+            });
+        });
+        setTimeout(()=> {
+          this.startTimer(myMap);
+        }, 3000);
+  
+       }).catch((error) => {
+         console.log('Error getting location', error);
+       });
 
+       
+    }
    showConfirm() {
     let confirm = this.alertCtrl.create({
       title: 'Share your location?',

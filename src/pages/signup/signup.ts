@@ -4,6 +4,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthProvider } from '../../providers/auth/auth';
 import { HomePage } from '../home/home';
 import { EmailValidator } from '../../validators/email';
+import * as firebase from 'firebase/app';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { TabsPage } from '../tabs/tabs';
 
 @IonicPage()
 @Component({
@@ -16,14 +19,15 @@ export class SignupPage {
 
   constructor(public nav: NavController, public authData: AuthProvider, 
     public formBuilder: FormBuilder, public loadingCtrl: LoadingController, 
-    public alertCtrl: AlertController) {
+    public alertCtrl: AlertController,private afAuth: AngularFireAuth) {
 
     this.signupForm = formBuilder.group({
       email: ['', Validators.compose([Validators.required, EmailValidator.isValid])],
       password: ['', Validators.compose([Validators.minLength(6), Validators.required])]
     });
-  }
 
+   
+  }
   /**
    * If the form is valid it will call the AuthData service to sign the user up password displaying a loading
    *  component while the user waits.
@@ -35,8 +39,20 @@ export class SignupPage {
       console.log(this.signupForm.value);
     } else {
       this.authData.signupUser(this.signupForm.value.email, this.signupForm.value.password)
-      .then(() => {
-        this.nav.setRoot(HomePage);
+      .then(auth => {
+        var lat:number;
+        var lng:number;
+        var user_name:String;
+        lat=0.2;
+        lng=0.1;
+        user_name="";
+        const personRef: firebase.database.Reference = firebase.database().ref("/User/" + auth.uid);
+        personRef.update({
+          lat,
+          lng,
+          user_name
+        });
+        this.nav.setRoot(TabsPage);
       }, (error) => {
         this.loading.dismiss().then( () => {
           var errorMessage: string = error.message;
