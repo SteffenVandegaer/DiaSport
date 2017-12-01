@@ -9,10 +9,11 @@ import {
   MarkerOptions,
   Marker
  } from '@ionic-native/google-maps';
- import { Geolocation } from '@ionic-native/geolocation';
- import * as firebase from 'firebase/app';
- import { AngularFireDatabase} from 'angularfire2/database';
- import { AngularFireAuth } from 'angularfire2/auth';
+import { Geolocation } from '@ionic-native/geolocation';
+import * as firebase from 'firebase/app';
+import { AngularFireDatabase} from 'angularfire2/database';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { ContactsPage } from '../contacts/contacts';
 
  declare var google;
  var myLat=0;
@@ -152,6 +153,8 @@ export class HomePage {
     
     confirm.present();
   }
-
+  contact(){
+    this.navCtrl.push(ContactsPage);
+  }
 
 }

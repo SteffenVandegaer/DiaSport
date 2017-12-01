@@ -1,4 +1,4 @@
-import { NgModule, ErrorHandler, Component, ViewChild, ElementRef } from '@angular/core';
+import { NgModule, ErrorHandler, Component, ViewChild } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
@@ -10,6 +10,7 @@ import { SettingsPage } from '../pages/settings/settings';
 import { MessagesPage } from '../pages/messages/messages';
 import { LoginPage } from '../pages/login/login';
 import { NavigatePage } from '../pages/navigate/navigate';
+import { ContactsPage } from '../pages/contacts/contacts';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AuthProvider } from '../providers/auth/auth';
@@ -43,7 +44,8 @@ const firebaseConfig = {
     TabsPage,
     LoginPage,
     MessagesPage,
-    NavigatePage
+    NavigatePage,
+    ContactsPage
   ],
   imports: [
     BrowserModule,
@@ -67,7 +69,8 @@ const firebaseConfig = {
     TabsPage,
     LoginPage,
     MessagesPage,
-    NavigatePage
+    NavigatePage,
+    ContactsPage
   ],
   providers: [
     StatusBar,
