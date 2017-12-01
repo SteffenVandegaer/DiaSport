@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController, Loading, AlertController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthProvider } from '../../providers/auth/auth';
-import { HomePage } from '../home/home';
 import { EmailValidator } from '../../validators/email';
 import * as firebase from 'firebase/app';
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -23,7 +22,8 @@ export class SignupPage {
 
     this.signupForm = formBuilder.group({
       email: ['', Validators.compose([Validators.required, EmailValidator.isValid])],
-      password: ['', Validators.compose([Validators.minLength(6), Validators.required])]
+      password: ['', Validators.compose([Validators.minLength(6), Validators.required])],
+      userName:['']
     });
 
    
@@ -34,7 +34,12 @@ export class SignupPage {
    *
    * If the form is invalid it will just log the form value, feel free to handle that as you like.
    */
+  checkAvailability(){
+    
+  }
+
   signupUser(){
+
     if (!this.signupForm.valid){
       console.log(this.signupForm.value);
     } else {
@@ -48,9 +53,12 @@ export class SignupPage {
         user_name="";
         const personRef: firebase.database.Reference = firebase.database().ref("/User/" + auth.uid);
         personRef.update({
-          lat,
-          lng,
           user_name
+        });
+        const locationRef: firebase.database.Reference = firebase.database().ref("/Location/" + auth.uid);
+        locationRef.update({
+          lat,
+          lng
         });
         this.nav.setRoot(TabsPage);
       }, (error) => {

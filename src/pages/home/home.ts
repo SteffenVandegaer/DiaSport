@@ -95,10 +95,10 @@ export class HomePage {
         myLng=resp.coords.longitude
         this.afAuth.authState.subscribe( user => {
           if (user) {
-            const users: firebase.database.Reference = firebase.database().ref(`/User/`+user.uid);
+            const users: firebase.database.Reference = firebase.database().ref(`/Location/`+user.uid);
             users.on('value', snapshot=> {
               var updates = {};
-              updates['/User/' + user.uid] = {lat:myLat,lng:myLng,user_name:snapshot.val().user_name};
+              updates['/Location/' + user.uid] = {lat:myLat,lng:myLng};
               firebase.database().ref().update(updates);
             });
           }

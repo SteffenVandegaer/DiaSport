@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+import * as firebase from 'firebase/app';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { AuthProvider } from '../../providers/auth/auth';
 
 /**
  * Generated class for the NavigatePage page.
@@ -19,9 +23,11 @@ export class NavigatePage {
 
   directionsService = new google.maps.DirectionsService;
   directionsDisplay = new google.maps.DirectionsRenderer;
+  connection
   map: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public authData: AuthProvider, private afDatabase: AngularFireDatabase, private afAuth: AngularFireAuth) {
+    this.connection = navParams.get('param1');
   }
 
   ionViewDidLoad(){
@@ -51,17 +57,38 @@ export class NavigatePage {
                console.log(error);
            }, locationOptions
        );
+       setTimeout(()=> {
+        this.navigatie();
+      }, 3000);
+       
        
    }
 
    navigatie(){
-     this.calculateAndDisplayRoute();
+    this.afAuth.authState.subscribe( user => {
+      if (user) {
+        const Connections: firebase.database.Reference = firebase.database().ref(`/User`);
+        Connections.on('value', snapshot=> {
+          snapshot.forEach((element)=>{
+            if(element.val().user_name==this.connection){
+              const Names: firebase.database.Reference = firebase.database().ref(`/Location/`+element.key);
+              Names.on('value', snapshott=> {
+                this.calculateAndDisplayRoute(snapshott.val().lat,snapshott.val().lng);
+              });
+              return true;
+            }
+            return false;
+          });
+        });
+      }
+    });
+     
    }
 
-   calculateAndDisplayRoute() {
+   calculateAndDisplayRoute(destLat, destLng) {
     this.directionsService.route({
       origin: new google.maps.LatLng(myLat, myLng),
-      destination: new google.maps.LatLng(50.839761, 5.022186),
+      destination: new google.maps.LatLng(destLat, destLng),
       travelMode: 'WALKING'
     }, (response, status) => {
       if (status === 'OK') {
@@ -70,6 +97,9 @@ export class NavigatePage {
         window.alert('Directions request failed due to ' + status);
       }
     });
+    setTimeout(()=> {
+      this.navigatie();
+    }, 3000);
   }
 
 }
