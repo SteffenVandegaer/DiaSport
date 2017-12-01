@@ -18,7 +18,7 @@ export class SignupPage {
 
   constructor(public nav: NavController, public authData: AuthProvider, 
     public formBuilder: FormBuilder, public loadingCtrl: LoadingController, 
-    public alertCtrl: AlertController,private afAuth: AngularFireAuth) {
+    public alertCtrl: AlertController) {
 
     this.signupForm = formBuilder.group({
       email: ['', Validators.compose([Validators.required, EmailValidator.isValid])],

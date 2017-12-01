@@ -17,13 +17,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { Geolocation } from '@ionic-native/geolocation';
 
 import {
-  GoogleMaps,
-  GoogleMap,
-  GoogleMapsEvent,
-  GoogleMapOptions,
-  CameraPosition,
-  MarkerOptions,
-  Marker
+  GoogleMaps
  } from '@ionic-native/google-maps';
 
 import { AngularFireModule } from 'angularfire2';

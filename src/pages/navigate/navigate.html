@@ -6,8 +6,13 @@
 -->
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar color="primary">
     <ion-title>Navigate</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="navigatie()">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
@@ -15,5 +20,4 @@
 
 <ion-content>
   <div id="map_canvas"></div>
-  <button ion-button round (click)="navigatie()">Test</button>
 </ion-content>

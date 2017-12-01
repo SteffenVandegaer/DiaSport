@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+import { AngularFireDatabase } from 'angularfire2/database';
 import * as firebase from 'firebase/app';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AuthProvider } from '../../providers/auth/auth';
@@ -26,7 +26,7 @@ export class NavigatePage {
   connection
   map: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public authData: AuthProvider, private afDatabase: AngularFireDatabase, private afAuth: AngularFireAuth) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public authData: AuthProvider, private afAuth: AngularFireAuth) {
     this.connection = navParams.get('param1');
   }
 
@@ -57,11 +57,7 @@ export class NavigatePage {
                console.log(error);
            }, locationOptions
        );
-       setTimeout(()=> {
-        this.navigatie();
-      }, 3000);
-       
-       
+       this.navigatie();
    }
 
    navigatie(){
@@ -97,9 +93,5 @@ export class NavigatePage {
         window.alert('Directions request failed due to ' + status);
       }
     });
-    setTimeout(()=> {
-      this.navigatie();
-    }, 3000);
   }
-
 }

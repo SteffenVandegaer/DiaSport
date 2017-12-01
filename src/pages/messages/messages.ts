@@ -41,7 +41,6 @@ export class MessagesPage {
             });
             return false;
           });
-          console.log(this.connections);
         });
         
       }
@@ -76,7 +75,6 @@ export class MessagesPage {
           snapshot.forEach((element)=>{
             
             if(element.val().user_name==link){
-              console.log(element.key);
               const idToRemove: firebase.database.Reference=firebase.database().ref('/Connection/'+user.uid);
               idToRemove.on('value',data=>{
                 data.forEach((dat)=>{
@@ -85,7 +83,6 @@ export class MessagesPage {
                     recordToRemove.remove();
                     return true;
                   }
-                  console.log(dat.val());
                   return false;
                 })
               });
