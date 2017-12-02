@@ -14,6 +14,7 @@ import * as firebase from 'firebase/app';
 import { AngularFireDatabase} from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { ContactsPage } from '../contacts/contacts';
+import { NavigatePage } from '../navigate/navigate';
 
  declare var google;
  var myLat=0;
@@ -101,6 +102,36 @@ export class HomePage {
           
         });
         myMap.clear();
+        this.afAuth.authState.subscribe( user => {
+          const Connections: firebase.database.Reference = firebase.database().ref(`/Connection/`+user.uid);
+          Connections.on('value', connections=> {
+            connections.forEach((connection)=>{
+              const Coords: firebase.database.Reference = firebase.database().ref(`/Location/`+connection.val().uid);
+              Coords.on('value', coord=> {
+                const username:firebase.database.Reference = firebase.database().ref(`/User/`+connection.val().uid);
+                username.on('value',name=>{
+                  myMap.addMarker({
+                    title: name.val().user_name+'\'s location',
+                    icon: 'blue',
+                    animation: 'NONE',
+                    position: {
+                      lat: coord.val().lat,
+                      lng: coord.val().lng
+                    }
+                  })
+                  .then(marker => {
+                    marker.on(GoogleMapsEvent.MARKER_CLICK)
+                      .subscribe(() => {
+                        this.navCtrl.push(NavigatePage,{param1:name.val().user_name});
+                      });
+                  });
+                });
+              });
+              return false;
+            });
+          });
+        });
+
         myMap.addMarker({
           title: 'My Location',
           icon: 'green',
