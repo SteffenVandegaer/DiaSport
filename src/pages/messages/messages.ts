@@ -34,7 +34,7 @@ export class MessagesPage {
           this.connections=[];
           teller=0;
           snapshot.forEach((element)=>{
-            const Names: firebase.database.Reference = firebase.database().ref(`/User/`+element.val());
+            const Names: firebase.database.Reference = firebase.database().ref(`/User/`+element.val().uid);
             Names.on('value', snapshott=> {
               this.connections[teller]=snapshott.val().user_name;
               teller++;  
@@ -78,7 +78,7 @@ export class MessagesPage {
               const idToRemove: firebase.database.Reference=firebase.database().ref('/Connection/'+user.uid);
               idToRemove.on('value',data=>{
                 data.forEach((dat)=>{
-                  if(dat.val()==element.key){
+                  if(dat.val().uid==element.key){
                     const recordToRemove: firebase.database.Reference=firebase.database().ref('/Connection/'+user.uid+'/'+dat.key);
                     recordToRemove.remove();
                     return true;

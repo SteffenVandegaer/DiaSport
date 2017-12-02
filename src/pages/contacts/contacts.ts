@@ -24,11 +24,10 @@ export class ContactsPage {
   }
 
   ionViewDidLoad() {
-    this.Test=true;
     this.contacts=[];
     let teller=0;
     this.afAuth.authState.subscribe( user => {
-      if (user&&this.Test) {
+      if (user) {
         this.User=user;
         const contacts: firebase.database.Reference = firebase.database().ref(`/Contacts/`+user.uid);
         contacts.on('value', snapshot=> {

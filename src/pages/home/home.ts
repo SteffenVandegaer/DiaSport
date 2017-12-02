@@ -84,11 +84,6 @@ export class HomePage {
     setTimeout(()=> {
       this.startTimer(this.map);
     }, 3000);
-    /*const subscription = this.geolocation.watchPosition()
-    .filter((p) => p.coords !== undefined) //Filter Out Errors
-    .subscribe(position => {
-       console.log(position.coords.longitude + ' ' + position.coords.latitude);
-     });*/
    }
    startTimer=(myMap)=>{
       this.geolocation.getCurrentPosition().then((resp) => {
@@ -132,26 +127,64 @@ export class HomePage {
        
     }
    showConfirm() {
-    let confirm = this.alertCtrl.create({
-      title: 'Share your location?',
-      message: 'Do you want to share your location with someone?',
-      buttons: [
-        {
-          text: 'Disagree',
-          handler: () => {
+    let teller=0;
+    let testBool=true;
+    this.afAuth.authState.subscribe( user => {
+      if (user) {
+        const contacts: firebase.database.Reference = firebase.database().ref(`/Contacts/`+user.uid);
+        contacts.on('value', snapshot=> {
+          let alert = this.alertCtrl.create();
+          alert = this.alertCtrl.create();
+          alert.setTitle('Select a contact to share your location with');
+          alert.addInput({type: 'radio', label: '', value: '0'});
+          snapshot.forEach((element)=>{
             
-          }
-        },
-        {
-          text: 'Agree',
-          handler: () => {
-            console.log('Agree clicked');
-          }
-        }
-      ]
+            const Names: firebase.database.Reference = firebase.database().ref(`/User/`+element.val().uid);
+            Names.on('value', snapshott=> {
+              console.log(snapshott.val().user_name);
+              if(snapshott.val()!=null){
+                alert.addInput({type: 'radio', label: snapshott.val().user_name, value: snapshott.key});
+              }
+            });
+            return false;
+          });
+          alert.addButton('Cancel');
+          alert.addButton({
+            text: 'OK',
+            handler: data => {
+              if(data!='0'){
+                const getId: firebase.database.Reference = firebase.database().ref(`/Connection/`+data);
+                getId.on('value', idsInDb=> {
+                  console.log(idsInDb.val());
+                  let id=1;
+                  if(idsInDb.val()!=null){
+                    idsInDb.forEach((recordUitDb)=>{
+                      id=parseInt(recordUitDb.key)+1;  
+                      return false;
+                    })
+                  }
+                  if(testBool){
+                    testBool=false;
+                    let uid=user.uid;
+                    var updates = {};
+                    updates['/Connection/' + data+'/'+id] = {uid};
+                    firebase.database().ref().update(updates);
+                  }
+                  
+
+                });
+              }
+            }
+          });
+          alert.present();
+        });
+        
+      }
+      
     });
+
     
-    confirm.present();
+    
   }
   contact(){
     this.navCtrl.push(ContactsPage);
