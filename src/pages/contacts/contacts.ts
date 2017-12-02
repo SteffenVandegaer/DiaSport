@@ -37,11 +37,11 @@ export class ContactsPage {
           snapshot.forEach((element)=>{
             const Names: firebase.database.Reference = firebase.database().ref(`/User/`+element.val().uid);
             Names.on('value', snapshott=> {
-              console.log(snapshott.val());
-              this.contacts[teller]=snapshott.val().user_name;
-              teller++;  
+              if(snapshott.val()!=null){
+                this.contacts[teller]=snapshott.val().user_name;
+                teller++;
+              }
             });
-            this.Test=false;
             return false;
           });
         });
@@ -72,17 +72,17 @@ export class ContactsPage {
 
   removeYes(link){
     this.afAuth.authState.subscribe( user => {
-      if (user&&this.Test) {
-        this.Test=false;
+      if (user) {
         const Connections: firebase.database.Reference = firebase.database().ref(`/User`);
         Connections.on('value', snapshot=> {
-          snapshot.forEach((element)=>{
-            if(element.val().user_name==link){
+          snapshot.forEach((gebruiker)=>{
+            console.log(gebruiker.val().user_name);
+            if(gebruiker.val().user_name==link){
               const idToRemove: firebase.database.Reference=firebase.database().ref('/Contacts/'+user.uid);
               idToRemove.on('value',data=>{
                 data.forEach((dat)=>{
-                  if(dat.val()==element.key){
-                    const recordToRemove: firebase.database.Reference=firebase.database().ref('/Contacts/'+user.uid+'/'+dat.key);
+                  if(dat.val().uid==gebruiker.key){
+                    const recordToRemove: firebase.database.Reference=firebase.database().ref('/Contacts/'+user.uid+'/'+dat.key+'/uid');
                     recordToRemove.remove();
                     return true;
                   }
@@ -132,8 +132,10 @@ export class ContactsPage {
 
   checkNewContact(name){
     let available=false;
+    
     if(name!=""){
         if (this.User) {
+          this.Test=false;
           const users: firebase.database.Reference = firebase.database().ref(`/User`);
           users.on('value', snapshot=> {
             snapshot.forEach( element => {
@@ -145,27 +147,50 @@ export class ContactsPage {
             });
             this.checkName(available,name);
           });
+          
       }
     }
   }
 
   checkName(available,name){
+    let id;
+    let testBool=true;
     if(available){
       const users: firebase.database.Reference = firebase.database().ref(`/Contacts/`+this.User.uid);
       users.on('value', snapshot=> {
         let id;
-        snapshot.forEach((element)=>{
-          id=element.key;
-          return false;
-        });
-        id=parseInt(id)+1;
+        if(snapshot.val()==null){
+          id=1;
+        }else{
+          snapshot.forEach((element)=>{
+            id=element.key;
+            return false;
+          });
+          id=parseInt(id)+1;
+        }
+        let uid;
         
-        var updates = {};
-        updates['/Contacts/' + this.User.uid + '/' + id] = {name};
-        console.log('ben hier');
-        firebase.database().ref().update(updates);
-        this.presentSuccesAlert();
+        const userId: firebase.database.Reference = firebase.database().ref('/User');
+        userId.on('value', allUsers=> {
+          allUsers.forEach((gebruiker)=>{
+            if(gebruiker.val().user_name==name){
+              uid=gebruiker.key;
+              
+              return true;
+            }
+            return false;
+          });
+          if(testBool){
+            testBool=false;
+            var updates = {};
+            updates['/Contacts/' + this.User.uid + '/' + id] = {uid};
+            firebase.database().ref().update(updates);
+            this.presentSuccesAlert();
+          }
+        });
+        
       });
+      
     }else{
       this.presentFailedAlert();
     }
