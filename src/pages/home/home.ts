@@ -110,21 +110,28 @@ export class HomePage {
               Coords.on('value', coord=> {
                 const username:firebase.database.Reference = firebase.database().ref(`/User/`+connection.val().uid);
                 username.on('value',name=>{
-                  myMap.addMarker({
-                    title: name.val().user_name+'\'s location',
-                    icon: 'blue',
-                    animation: 'NONE',
-                    position: {
-                      lat: coord.val().lat,
-                      lng: coord.val().lng
-                    }
-                  })
-                  .then(marker => {
-                    marker.on(GoogleMapsEvent.MARKER_CLICK)
-                      .subscribe(() => {
-                        this.navCtrl.push(NavigatePage,{param1:name.val().user_name});
-                      });
-                  });
+                  var d = new Date();
+                  if(d.getTime()-connection.val().time>3600000){
+                    const recordToRemove: firebase.database.Reference=firebase.database().ref('/Connection/'+user.uid+'/'+connection.key);
+                    recordToRemove.remove();
+                  }else{
+                    myMap.addMarker({
+                      title: name.val().user_name+'\'s location',
+                      icon: 'blue',
+                      animation: 'NONE',
+                      position: {
+                        lat: coord.val().lat,
+                        lng: coord.val().lng
+                      }
+                    })
+                    .then(marker => {
+                      marker.on(GoogleMapsEvent.MARKER_CLICK)
+                        .subscribe(() => {
+                          this.navCtrl.push(NavigatePage,{param1:name.val().user_name});
+                        });
+                    });
+                  }
+                  
                 });
               });
               return false;
@@ -198,7 +205,8 @@ export class HomePage {
                     testBool=false;
                     let uid=user.uid;
                     var updates = {};
-                    updates['/Connection/' + data+'/'+id] = {uid};
+                    var d = new Date();
+                    updates['/Connection/' + data+'/'+id] = {uid,time:d.getTime()};
                     firebase.database().ref().update(updates);
                   }
                   

@@ -90,7 +90,7 @@ export class NavigatePage {
       if (status === 'OK') {
         this.directionsDisplay.setDirections(response);
       } else {
-        window.alert('Directions request failed due to ' + status);
+        this.navigatie();
       }
     });
   }
