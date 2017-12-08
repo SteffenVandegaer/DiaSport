@@ -24,6 +24,7 @@ export class ContactsPage {
   }
 
   ionViewDidLoad() {
+    console.log('ben er');
     this.contacts=[];
     let teller=0;
     this.afAuth.authState.subscribe( user => {

@@ -15,6 +15,7 @@ import { AngularFireDatabase} from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { ContactsPage } from '../contacts/contacts';
 import { NavigatePage } from '../navigate/navigate';
+import { empty } from 'rxjs/Observer';
 
  declare var google;
  var myLat=0;
@@ -34,10 +35,9 @@ export class HomePage {
     
   }
 
-  ionViewDidLoad() {
+  ionViewDidEnter(){
     this.loadMap();
-   }
-  
+  }
 
   loadMap() {
     this.geolocation.getCurrentPosition().then((resp) => {
@@ -166,56 +166,65 @@ export class HomePage {
     }
    showConfirm() {
     let teller=0;
+    var aantal=0;
     let testBool=true;
     this.afAuth.authState.subscribe( user => {
       if (user) {
         const contacts: firebase.database.Reference = firebase.database().ref(`/Contacts/`+user.uid);
         contacts.on('value', snapshot=> {
           let alert = this.alertCtrl.create();
-          alert = this.alertCtrl.create();
+          var check=true;
           alert.setTitle('Select a contact to share your location with');
-          alert.addInput({type: 'radio', label: '', value: '0'});
+          //alert.addInput({type: 'radio', label: '', value: '0'});
+          snapshot.forEach((element)=>{
+            aantal++;
+            return false;
+          });
           snapshot.forEach((element)=>{
             
             const Names: firebase.database.Reference = firebase.database().ref(`/User/`+element.val().uid);
-            Names.on('value', snapshott=> {
-              console.log(snapshott.val().user_name);
-              if(snapshott.val()!=null){
-                alert.addInput({type: 'radio', label: snapshott.val().user_name, value: snapshott.key});
+            Names.on('value', namen=> {
+              if(namen.val()!=empty){
+                teller++;
+                console.log(aantal);
+                alert.addInput({type: 'radio', label: namen.val().user_name, value: namen.key});
+              }
+              if(teller==aantal){
+                alert.addButton('Cancel');
+                alert.addButton({
+                  text: 'OK',
+                  handler: data => {
+                    if(data!='0'){
+                      const getId: firebase.database.Reference = firebase.database().ref(`/Connection/`+data);
+                      getId.on('value', idsInDb=> {
+                        let id=1;
+                        if(idsInDb.val()!=null){
+                          idsInDb.forEach((recordUitDb)=>{
+                            id=parseInt(recordUitDb.key)+1;  
+                            return false;
+                          })
+                        }
+                        if(testBool){
+                          testBool=false;
+                          let uid=user.uid;
+                          var updates = {};
+                          var d = new Date();
+                          updates['/Connection/' + data+'/'+id] = {uid,time:d.getTime()};
+                          firebase.database().ref().update(updates);
+                        }
+                        
+      
+                      });
+                    }
+                  }
+                  
+                });
+                alert.present();
               }
             });
             return false;
           });
-          alert.addButton('Cancel');
-          alert.addButton({
-            text: 'OK',
-            handler: data => {
-              if(data!='0'){
-                const getId: firebase.database.Reference = firebase.database().ref(`/Connection/`+data);
-                getId.on('value', idsInDb=> {
-                  console.log(idsInDb.val());
-                  let id=1;
-                  if(idsInDb.val()!=null){
-                    idsInDb.forEach((recordUitDb)=>{
-                      id=parseInt(recordUitDb.key)+1;  
-                      return false;
-                    })
-                  }
-                  if(testBool){
-                    testBool=false;
-                    let uid=user.uid;
-                    var updates = {};
-                    var d = new Date();
-                    updates['/Connection/' + data+'/'+id] = {uid,time:d.getTime()};
-                    firebase.database().ref().update(updates);
-                  }
-                  
-
-                });
-              }
-            }
-          });
-          alert.present();
+          
         });
         
       }

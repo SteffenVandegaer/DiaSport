@@ -41,6 +41,7 @@ export class SettingsPage {
   logout(){
     this.authData.logoutUser();
     this.navCtrl.push(LoginPage);
+    window.location.reload();
   }
 
   navigate(){
