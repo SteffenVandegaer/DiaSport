@@ -35,7 +35,7 @@ export class HomePage {
     
   }
 
-  ionViewDidEnter(){
+  ionViewDidLoad(){
     this.loadMap();
   }
 

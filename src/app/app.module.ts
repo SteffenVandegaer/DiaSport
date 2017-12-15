@@ -11,10 +11,10 @@ import { MessagesPage } from '../pages/messages/messages';
 import { LoginPage } from '../pages/login/login';
 import { NavigatePage } from '../pages/navigate/navigate';
 import { ContactsPage } from '../pages/contacts/contacts';
+
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AuthProvider } from '../providers/auth/auth';
-import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { Geolocation } from '@ionic-native/geolocation';
 
 import {
@@ -77,7 +77,6 @@ const firebaseConfig = {
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthProvider,
-    AndroidPermissions,
     MyApp,
     GoogleMaps,
     Geolocation

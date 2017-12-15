@@ -20,31 +20,37 @@ import { NavigatePage } from '../navigate/navigate';
 export class MessagesPage {
   private User;
   private connections:any;
+  private amount:any;
   constructor(public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, public authData: AuthProvider, private afDatabase: AngularFireDatabase, private afAuth: AngularFireAuth) {
   }
 
   ionViewDidLoad() {
     this.connections=[];
     let teller=0;
+    
     this.afAuth.authState.subscribe( user => {
+      
       if (user) {
         this.User=user;
         const Connections: firebase.database.Reference = firebase.database().ref(`/Connection/`+user.uid);
         Connections.on('value', snapshot=> {
           this.connections=[];
           teller=0;
+          this.amount=0;
           snapshot.forEach((element)=>{
             const Names: firebase.database.Reference = firebase.database().ref(`/User/`+element.val().uid);
             Names.on('value', snapshott=> {
               this.connections[teller]=snapshott.val().user_name;
-              teller++;  
+              teller++;
+              this.amount=teller; 
             });
+            
             return false;
           });
+          
         });
         
       }
-      
     });
   }
 

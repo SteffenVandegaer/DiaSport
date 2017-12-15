@@ -21,9 +21,16 @@
 <ion-content>
   <ion-list>
     <ion-item-sliding *ngFor="let contact of contacts" #item>
-      <ion-item >{{contact}}</ion-item>
+        
+      <ion-item >
+        <button ion-button  (click)="sendToUser(contact[1],contact[0])" block large>
+          {{contact[0]}}
+        </button>
+        
+      </ion-item>
+      
       <ion-item-options side="right">
-        <button ion-button color="danger" (click)="remove(contact)">Remove</button>
+        <button ion-button color="danger" (click)="remove(contact[0])">Remove</button>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>

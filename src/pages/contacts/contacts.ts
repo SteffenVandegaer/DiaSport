@@ -18,6 +18,7 @@ import { AuthProvider } from '../../providers/auth/auth';
 })
 export class ContactsPage {
   private contacts:any;
+  private uids:any;
   private User;
   private Test:boolean;
   constructor(public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, public authData: AuthProvider, private afDatabase: AngularFireDatabase, private afAuth: AngularFireAuth) {
@@ -33,12 +34,16 @@ export class ContactsPage {
         const contacts: firebase.database.Reference = firebase.database().ref(`/Contacts/`+user.uid);
         contacts.on('value', snapshot=> {
           this.contacts=[];
+          this.uids=[];
           teller=0;
           snapshot.forEach((element)=>{
             const Names: firebase.database.Reference = firebase.database().ref(`/User/`+element.val().uid);
             Names.on('value', snapshott=> {
               if(snapshott.val()!=null){
-                this.contacts[teller]=snapshott.val().user_name;
+                let dataToSendToview=[];
+                dataToSendToview[0]=snapshott.val().user_name;
+                dataToSendToview[1]=snapshott.key;
+                this.contacts[teller]=dataToSendToview;
                 teller++;
               }
             });
@@ -51,10 +56,56 @@ export class ContactsPage {
     });
   }
 
+  sendToUserYes(destinationUid){
+    let testBool=true;
+    
+    const getId: firebase.database.Reference = firebase.database().ref(`/Connection/`+destinationUid);
+    getId.on('value', idsInDb=> {
+      let id=1;
+      if(idsInDb.val()!=null){
+        idsInDb.forEach((recordUitDb)=>{
+          id=parseInt(recordUitDb.key)+1;  
+          return false;
+        })
+      }
+      
+      if(testBool){
+        testBool=false;
+        let uid=this.User.uid;
+        var updates = {};
+        var d = new Date();
+        updates['/Connection/' + destinationUid+'/'+id] = {uid,time:d.getTime()};
+        firebase.database().ref().update(updates);
+      }
+      
+
+    });
+  }
+
+  sendToUser(destinationUid,name){
+    let alert = this.alertCtrl.create({
+      title: 'Warning',
+      subTitle: 'Do you want to share your location with '+name+'?',
+      buttons: [
+                { 
+                  text:'No',
+                  role: 'cancel',
+                  handler: () => {
+                  
+                }},
+                { text:'Yes',
+                  handler: () => {
+                    this.sendToUserYes(destinationUid);
+                }}
+                ]
+    });
+    alert.present();
+  }
+
   remove(link){
     this.Test=true;
     let alert = this.alertCtrl.create({
-      title: 'Warning',
+      title: 'Share your location',
       subTitle: 'are you sure you want to remove '+link+' ',
       buttons: [{ text:'Apply',
                   handler: () => {
@@ -196,6 +247,7 @@ export class ContactsPage {
     }
     
   }
+  
   
   presentSuccesAlert() {
     let alert = this.alertCtrl.create({
