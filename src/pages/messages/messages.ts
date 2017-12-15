@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import * as firebase from 'firebase/app';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AuthProvider } from '../../providers/auth/auth';
@@ -21,7 +20,7 @@ export class MessagesPage {
   private User;
   private connections:any;
   private amount:any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, public authData: AuthProvider, private afDatabase: AngularFireDatabase, private afAuth: AngularFireAuth) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, public authData: AuthProvider, private afAuth: AngularFireAuth) {
   }
 
   ionViewDidLoad() {
@@ -58,16 +57,16 @@ export class MessagesPage {
     let alert = this.alertCtrl.create({
       title: 'Warning',
       subTitle: 'are you sure you want to remove '+link+' ',
-      buttons: [{ text:'Apply',
-                  handler: () => {
-                    this.removeYes(link);
-                }},
-                { 
-                  text:'Dismiss',
+      buttons: [{ 
+                  text:'No',
                   role: 'cancel',
                   handler: () => {
-                  
-                }}]
+                }},
+                { text:'Yes',
+                  handler: () => {
+                    this.removeYes(link);
+                }}
+                ]
     });
     alert.present();
   }

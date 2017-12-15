@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
 import { SettingsPage } from '../settings/settings';
 import { HomePage } from '../home/home';
 import { MessagesPage } from '../messages/messages';
@@ -15,7 +14,7 @@ export class TabsPage {
   tab3Root = SettingsPage;
 
   constructor(private statusBar: StatusBar) {
-    this.statusBar.backgroundColorByHexString('#488aff');
+    this.statusBar.backgroundColorByHexString('#028090');
   }
   
 }

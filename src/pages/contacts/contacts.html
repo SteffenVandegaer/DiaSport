@@ -23,7 +23,7 @@
     <ion-item-sliding *ngFor="let contact of contacts" #item>
         
       <ion-item >
-        <button ion-button  (click)="sendToUser(contact[1],contact[0])" block large>
+        <button ion-button color="messages" (click)="sendToUser(contact[1],contact[0])" block large>
           {{contact[0]}}
         </button>
         

@@ -14,17 +14,16 @@
 
 
 
-<ion-content>
-  <p *ngIf="!amount">So Ronery</p>
+<ion-content padding>
+  <p id="emptyMessage" *ngIf="!amount">So Ronery</p>
   <ion-list id="contactLijst">
     <ion-item-sliding *ngFor="let connection of connections" #item>
       <ion-item >
-          <button ion-button  (click)="showRoute(connection)" block large>
+          <button ion-button color="messages" (click)="showRoute(connection)" block large>
               {{connection}}
             </button>
       </ion-item>
       <ion-item-options side="right">
-        <button ion-button (click)="showRoute(connection)">Open</button>
         <button ion-button color="danger" (click)="remove(connection)">Remove</button>
       </ion-item-options>
     </ion-item-sliding>

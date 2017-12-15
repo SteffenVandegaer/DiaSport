@@ -4,23 +4,19 @@ import {
   GoogleMaps,
   GoogleMap,
   GoogleMapsEvent,
-  GoogleMapOptions,
-  CameraPosition,
-  MarkerOptions,
-  Marker
+  GoogleMapOptions
  } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
 import * as firebase from 'firebase/app';
-import { AngularFireDatabase} from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { ContactsPage } from '../contacts/contacts';
 import { NavigatePage } from '../navigate/navigate';
 import { empty } from 'rxjs/Observer';
 
- declare var google;
+
  var myLat=0;
  var myLng=0;
- var directions;
+ 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -30,7 +26,7 @@ export class HomePage {
   map: GoogleMap;
   
   
-  constructor(public navCtrl: NavController,private googleMaps: GoogleMaps,private geolocation: Geolocation,public alertCtrl: AlertController, private afDatabase: AngularFireDatabase, private afAuth: AngularFireAuth) {
+  constructor(public navCtrl: NavController,private googleMaps: GoogleMaps,private geolocation: Geolocation,public alertCtrl: AlertController, private afAuth: AngularFireAuth) {
     
     
   }
@@ -173,7 +169,6 @@ export class HomePage {
         const contacts: firebase.database.Reference = firebase.database().ref(`/Contacts/`+user.uid);
         contacts.on('value', snapshot=> {
           let alert = this.alertCtrl.create();
-          var check=true;
           alert.setTitle('Select a contact to share your location with');
           //alert.addInput({type: 'radio', label: '', value: '0'});
           snapshot.forEach((element)=>{
