@@ -4,7 +4,7 @@ import { NavigatePage } from './navigate';
 
 @NgModule({
   declarations: [
-    NavigatePage,
+    
   ],
   imports: [
     IonicPageModule.forChild(NavigatePage),
