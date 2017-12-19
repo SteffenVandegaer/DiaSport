@@ -30,11 +30,12 @@ export class NavigatePage {
   }
 
   ionViewDidLoad(){
+    //laad kaart
     this.initializeMap();
   }
 
   initializeMap() {
-    
+    //laad kaart
        let locationOptions = {timeout: 20000, enableHighAccuracy: true};
        
        navigator.geolocation.getCurrentPosition(
@@ -60,6 +61,7 @@ export class NavigatePage {
    }
 
    navigatie(){
+     //laad coördinaten van contact zien
     this.afAuth.authState.subscribe( user => {
       if (user) {
         const Connections: firebase.database.Reference = firebase.database().ref(`/User`);
@@ -81,6 +83,7 @@ export class NavigatePage {
    }
 
    calculateAndDisplayRoute(destLat, destLng) {
+     //laat route naar contact zien
     this.directionsService.route({
       origin: new google.maps.LatLng(myLat, myLng),
       destination: new google.maps.LatLng(destLat, destLng),

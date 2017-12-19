@@ -24,6 +24,7 @@ export class MessagesPage {
   }
 
   ionViewDidLoad() {
+    //laad alle messages
     this.connections=[];
     let teller=0;
     
@@ -54,6 +55,7 @@ export class MessagesPage {
   }
 
   remove(link){
+    //laat alert zien met de vraag om een gekozen bericht te verwijderen
     let alert = this.alertCtrl.create({
       title: 'Warning',
       subTitle: 'are you sure you want to remove '+link+' ',
@@ -72,6 +74,7 @@ export class MessagesPage {
   }
 
   removeYes(link){
+    //verwijder message
     this.afAuth.authState.subscribe( user => {
       if (user) {
         this.User=user;
@@ -104,7 +107,7 @@ export class MessagesPage {
     });
   }
   showRoute(connectTo){
-    
+    //laat navigatie naar contact zien
     this.navCtrl.push(NavigatePage,{param1:connectTo});
   }
 

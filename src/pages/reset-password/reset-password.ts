@@ -28,6 +28,7 @@ export class ResetPasswordPage {
 }
 
 resetPassword(){
+  //reset password using firebase
   if (!this.resetPasswordForm.valid){
     console.log(this.resetPasswordForm.value);
   } else {

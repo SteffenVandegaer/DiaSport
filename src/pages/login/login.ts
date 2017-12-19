@@ -24,8 +24,10 @@ export class LoginPage {
   constructor(public navCtrl: NavController,afAuth: AngularFireAuth, public authData: AuthProvider, 
     public formBuilder: FormBuilder, public alertCtrl: AlertController,
     public loadingCtrl: LoadingController) {
+      //check als de user nog ingelogd is
       const authObserver = afAuth.authState.subscribe( user => {
         if (user) {
+          //open tabspagina
           this.navCtrl.push(TabsPage);
         } 
         authObserver.unsubscribe();
@@ -38,6 +40,7 @@ export class LoginPage {
   }
   
   loginUser(){
+    //check login gegevens en navigeer naar de juiste pagina als de gegevens juist zijn.
     if (!this.loginForm.valid){
       console.log(this.loginForm.value);
     } else {
@@ -68,10 +71,12 @@ export class LoginPage {
 
 
   goToResetPassword(){
+    //laad resetPasswordPagina
     this.navCtrl.push('ResetPasswordPage');
   }
 
   createAccount(){
+    //laad signup pagina
     this.navCtrl.push('SignupPage');
   }
 

@@ -32,10 +32,12 @@ export class HomePage {
   }
 
   ionViewDidLoad(){
+    //inladen google map
     this.loadMap();
   }
 
   loadMap() {
+    //inladen van kaart + starten timer + inladen/plaatsen markers
     this.geolocation.getCurrentPosition().then((resp) => {
       myLat=resp.coords.latitude
       myLng=resp.coords.longitude
@@ -161,6 +163,7 @@ export class HomePage {
        
     }
    showConfirm() {
+    //laat route naar ander contact zien
     let teller=0;
     var aantal=0;
     let testBool=true;
@@ -170,7 +173,6 @@ export class HomePage {
         contacts.on('value', snapshot=> {
           let alert = this.alertCtrl.create();
           alert.setTitle('Select a contact to share your location with');
-          //alert.addInput({type: 'radio', label: '', value: '0'});
           snapshot.forEach((element)=>{
             aantal++;
             return false;
@@ -230,6 +232,7 @@ export class HomePage {
     
   }
   contact(){
+    //open contacts page
     this.navCtrl.push(ContactsPage);
   }
 

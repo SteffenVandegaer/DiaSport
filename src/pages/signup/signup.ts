@@ -33,12 +33,9 @@ export class SignupPage {
    *
    * If the form is invalid it will just log the form value, feel free to handle that as you like.
    */
-  checkAvailability(){
-    
-  }
 
   signupUser(){
-
+    //maak nieuwe user aan met firebase
     if (!this.signupForm.valid){
       console.log(this.signupForm.value);
     } else {

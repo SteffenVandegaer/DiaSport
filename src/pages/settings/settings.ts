@@ -22,7 +22,7 @@ export class SettingsPage {
   }
 
   ionViewDidLoad() {
-    
+    //zet username van de gebruiker in het tekstvak
     this.afAuth.authState.subscribe( user => {
       if (user) {
         this.User=user;
@@ -38,16 +38,14 @@ export class SettingsPage {
   }
  
   logout(){
+    //logout user en navigeer naar de loginpagina
     this.authData.logoutUser();
     this.navCtrl.push(LoginPage);
     window.location.reload();
   }
-
-  navigate(){
-    this.navCtrl.push(NavigatePage);
-  }
   
   saveSettings(){
+    //sla nieuwe username op in de db
     let available=true;
     if(this.testtest!=""){
         if (this.User) {
@@ -67,6 +65,7 @@ export class SettingsPage {
   }
 
   checkName(available){
+    //kijk na of de nieuwe username beshikbaar is
     if(available){
       const users: firebase.database.Reference = firebase.database().ref(`/User/`+this.User.uid);
       users.on('value', snapshot=> {
@@ -82,6 +81,7 @@ export class SettingsPage {
   }
   
   presentSuccesAlert() {
+    //alert om aan te geven dat de usernaam succesvol geupdate is
     let alert = this.alertCtrl.create({
       title: 'Succes',
       subTitle: 'Your username has been updated',
@@ -95,6 +95,7 @@ export class SettingsPage {
   }
 
   presentFailedAlert() {
+    //alert om aan te geven dat de usernaam niet geldig is
     let alert = this.alertCtrl.create({
       title: 'Error',
       subTitle: 'The username you chose is already taken',

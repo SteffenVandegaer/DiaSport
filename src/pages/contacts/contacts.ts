@@ -24,7 +24,7 @@ export class ContactsPage {
   }
 
   ionViewDidLoad() {
-    console.log('ben er');
+    //hier worden alle contacten van de gebruiker ingeladen
     this.contacts=[];
     let teller=0;
     this.afAuth.authState.subscribe( user => {
@@ -56,6 +56,7 @@ export class ContactsPage {
   }
 
   sendToUserYes(destinationUid){
+    //stuurt de locatie van de gebruiker naar een andere gebruiker
     let testBool=true;
     
     const getId: firebase.database.Reference = firebase.database().ref(`/Connection/`+destinationUid);
@@ -82,6 +83,7 @@ export class ContactsPage {
   }
 
   sendToUser(destinationUid,name){
+    //laat alert zien met de vraag of je zeker bent of je je locatie wil delen met de gekozen persoon
     let alert = this.alertCtrl.create({
       title: 'Warning',
       subTitle: 'Do you want to share your location with '+name+'?',
@@ -102,6 +104,7 @@ export class ContactsPage {
   }
 
   remove(link){
+    //alert met de vraag of je zeker bent dat je het gekozen contact wil verwijderen
     this.Test=true;
     let alert = this.alertCtrl.create({
       title: 'Share your location',
@@ -121,6 +124,7 @@ export class ContactsPage {
   }
 
   removeYes(link){
+    //verwijderen van een contact
     this.afAuth.authState.subscribe( user => {
       if (user) {
         const Connections: firebase.database.Reference = firebase.database().ref(`/User`);
@@ -152,6 +156,7 @@ export class ContactsPage {
   }
 
   addUser(){
+    //user toevoegen aan je contacten
     let alert = this.alertCtrl.create({
       title: 'Add contact',
       subTitle: 'Fill out the name of the new contact you want to add',
@@ -181,6 +186,7 @@ export class ContactsPage {
   }
 
   checkNewContact(name){
+    //nakijken of de gekozen contactpersoon bestaat
     let available=false;
     
     if(name!=""){
@@ -203,6 +209,7 @@ export class ContactsPage {
   }
 
   checkName(available,name){
+    //schrijft het nieuwe contact weg naar de db
     let testBool=true;
     if(available){
       const users: firebase.database.Reference = firebase.database().ref(`/Contacts/`+this.User.uid);
@@ -248,6 +255,7 @@ export class ContactsPage {
   
   
   presentSuccesAlert() {
+    //alert die aangeeft dat een contact succesvol is toegevoegd
     let alert = this.alertCtrl.create({
       title: 'Succes',
       subTitle: 'New contact added',
@@ -261,6 +269,7 @@ export class ContactsPage {
   }
 
   presentFailedAlert() {
+    //alert die aangeeft dat het ingegeven contact niet gevonden is
     let alert = this.alertCtrl.create({
       title: 'Error',
       subTitle: 'the chosen contact wasn\'t found',
