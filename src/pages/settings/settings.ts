@@ -15,6 +15,7 @@ export class SettingsPage {
   public app : MyApp;
   public testtest: String="";
   public data:any[] = [];
+  
   private User;
 
   constructor( public navCtrl: NavController, private alertCtrl: AlertController, public navParams: NavParams, public authData: AuthProvider, private afAuth: AngularFireAuth) {
@@ -46,6 +47,7 @@ export class SettingsPage {
   
   saveSettings(){
     //sla nieuwe username op in de db
+    let check=true;
     let available=true;
     if(this.testtest!=""){
         if (this.User) {
@@ -58,7 +60,11 @@ export class SettingsPage {
               }
               return false;
             });
-            this.checkName(available);
+            if(check){
+              check=false;
+              this.checkName(available);
+            }
+            
           });
       }
     }
@@ -66,17 +72,22 @@ export class SettingsPage {
 
   checkName(available){
     //kijk na of de nieuwe username beshikbaar is
-    if(available){
-      const users: firebase.database.Reference = firebase.database().ref(`/User/`+this.User.uid);
-      users.on('value', snapshot=> {
-        var updates = {};
-        updates['/User/' + this.User.uid] = {user_name:this.testtest};
-        firebase.database().ref().update(updates);
-        this.presentSuccesAlert();
-      });
-    }else{
-      this.presentFailedAlert();
-    }
+    let check=true;
+      if(available){
+        const users: firebase.database.Reference = firebase.database().ref(`/User/`+this.User.uid);
+        users.on('value', snapshot=> {
+            
+            var updates = {};
+            updates['/User/' + this.User.uid] = {user_name:this.testtest};
+            if(check){
+              check=false;
+              firebase.database().ref().update(updates);
+              this.presentSuccesAlert();
+            }
+        });
+      }else{
+        this.presentFailedAlert();
+      }
     
   }
   
