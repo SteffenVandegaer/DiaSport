@@ -15,7 +15,6 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AuthProvider } from '../providers/auth/auth';
 import { Geolocation } from '@ionic-native/geolocation';
-
 import {
   GoogleMaps
  } from '@ionic-native/google-maps';
