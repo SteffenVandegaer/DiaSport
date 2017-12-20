@@ -60,7 +60,7 @@ export class ContactsPage {
     let testBool=true;
     
     const getId: firebase.database.Reference = firebase.database().ref(`/Connection/`+destinationUid);
-    getId.on('value', idsInDb=> {
+    getId.once('value', idsInDb=> {
       let id=1;
       if(idsInDb.val()!=null){
         idsInDb.forEach((recordUitDb)=>{
@@ -80,6 +80,7 @@ export class ContactsPage {
       
 
     });
+    getId.off;
   }
 
   sendToUser(destinationUid,name){
@@ -128,7 +129,7 @@ export class ContactsPage {
     this.afAuth.authState.subscribe( user => {
       if (user) {
         const Connections: firebase.database.Reference = firebase.database().ref(`/User`);
-        Connections.on('value', snapshot=> {
+        Connections.once('value', snapshot=> {
           snapshot.forEach((gebruiker)=>{
             console.log(gebruiker.val().user_name);
             if(gebruiker.val().user_name==link){
@@ -148,6 +149,7 @@ export class ContactsPage {
             return false;
           });
         });
+        
       }
       this.contacts=[];
       this.navCtrl.setRoot(ContactsPage);
@@ -193,7 +195,7 @@ export class ContactsPage {
         if (this.User) {
           this.Test=false;
           const users: firebase.database.Reference = firebase.database().ref(`/User`);
-          users.on('value', snapshot=> {
+          users.once('value', snapshot=> {
             snapshot.forEach( element => {
               if(element.val().user_name==name && element.key != this.User.uid){
                 available=true;
@@ -213,7 +215,7 @@ export class ContactsPage {
     let testBool=true;
     if(available){
       const users: firebase.database.Reference = firebase.database().ref(`/Contacts/`+this.User.uid);
-      users.on('value', snapshot=> {
+      users.once('value', snapshot=> {
         let id;
         if(snapshot.val()==null){
           id=1;
@@ -227,7 +229,7 @@ export class ContactsPage {
         let uid;
         
         const userId: firebase.database.Reference = firebase.database().ref('/User');
-        userId.on('value', allUsers=> {
+        userId.once('value', allUsers=> {
           allUsers.forEach((gebruiker)=>{
             if(gebruiker.val().user_name==name){
               uid=gebruiker.key;

@@ -3,7 +3,6 @@ import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 import { LoginPage } from '../login/login';
 import { MyApp } from '../../app/app.component';
-import { NavigatePage } from '../navigate/navigate';
 import * as firebase from 'firebase/app';
 import { AngularFireAuth } from 'angularfire2/auth';
 
@@ -75,7 +74,7 @@ export class SettingsPage {
     let check=true;
       if(available){
         const users: firebase.database.Reference = firebase.database().ref(`/User/`+this.User.uid);
-        users.on('value', snapshot=> {
+        users.once('value', snapshot=> {
             
             var updates = {};
             updates['/User/' + this.User.uid] = {user_name:this.testtest};
@@ -85,6 +84,7 @@ export class SettingsPage {
               this.presentSuccesAlert();
             }
         });
+        users.off;
       }else{
         this.presentFailedAlert();
       }

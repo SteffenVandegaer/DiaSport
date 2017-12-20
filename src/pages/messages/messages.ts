@@ -79,12 +79,12 @@ export class MessagesPage {
       if (user) {
         this.User=user;
         const Connections: firebase.database.Reference = firebase.database().ref(`/User`);
-        Connections.on('value', snapshot=> {
+        Connections.once('value', snapshot=> {
           snapshot.forEach((element)=>{
             
             if(element.val().user_name==link){
               const idToRemove: firebase.database.Reference=firebase.database().ref('/Connection/'+user.uid);
-              idToRemove.on('value',data=>{
+              idToRemove.once('value',data=>{
                 data.forEach((dat)=>{
                   if(dat.val().uid==element.key){
                     const recordToRemove: firebase.database.Reference=firebase.database().ref('/Connection/'+user.uid+'/'+dat.key);
